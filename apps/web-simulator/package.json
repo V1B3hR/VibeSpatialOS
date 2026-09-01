@@ -13,6 +13,7 @@
     "@vibe/closed-loop": "*",
     "@vibe/rf-sensing": "*",
     "@vibe/semantic-ai": "*",
+    "@vibe/sensor-fusion": "*",
     "@vibe/spatial-core": "*",
     "three": "^0.174.0"
   },

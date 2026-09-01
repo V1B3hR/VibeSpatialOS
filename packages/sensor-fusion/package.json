@@ -1,0 +1,27 @@
+{
+  "name": "@vibe/sensor-fusion",
+  "version": "2.0.0",
+  "description": "VIBE SpatialOS - Multimodal Gaussian Sensor Fusion (RF CSI + ToF + 500Hz IMU + BCI) with Mahalanobis Gating and Occlusion Handover",
+  "type": "module",
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "exports": {
+    ".": {
+      "types": "./src/index.ts",
+      "import": "./src/index.ts",
+      "default": "./src/index.ts"
+    }
+  },
+  "scripts": {
+    "build": "tsc -b",
+    "dev": "tsc -b -w"
+  },
+  "dependencies": {
+    "@vibe/bci-cognitive": "*",
+    "@vibe/rf-sensing": "*",
+    "@vibe/spatial-core": "*"
+  },
+  "devDependencies": {
+    "typescript": "^5.7.3"
+  }
+}

@@ -161,5 +161,33 @@ export class SpatialHUD {
       this.wristGestureEl.style.color = 'var(--accent-orange)';
     }
   }
+
+  public updateFusionHUD(
+    tofWeight: number = 0.75,
+    rfWeight: number = 0.15,
+    imuWeight: number = 0.10,
+    isOccluded: boolean = false,
+    outlierRejected: boolean = false
+  ): void {
+    const fusionEl = document.getElementById('stat-fusion-provenance');
+    if (fusionEl) {
+      const tofPct = Math.round(tofWeight * 100);
+      const rfPct = Math.round(rfWeight * 100);
+      const imuPct = Math.round(imuWeight * 100);
+
+      fusionEl.innerText = isOccluded
+        ? `[OCCLUSION] RF: ${rfPct}% | IMU: ${imuPct}%`
+        : `ToF: ${tofPct}% | RF: ${rfPct}% | IMU: ${imuPct}%`;
+      fusionEl.style.color = isOccluded ? 'var(--accent-orange)' : 'var(--accent-cyan)';
+    }
+
+    const gatingEl = document.getElementById('stat-fusion-gating');
+    if (gatingEl) {
+      gatingEl.innerText = outlierRejected
+        ? 'OUTLIER REJECTED (χ² > 11.34)'
+        : 'NOMINAL (χ² < 11.34)';
+      gatingEl.style.color = outlierRejected ? 'var(--accent-orange)' : 'var(--accent-green)';
+    }
+  }
 }
 

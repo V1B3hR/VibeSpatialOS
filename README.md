@@ -1,11 +1,11 @@
 # 🌌 VIBE SpatialOS & Studio (v2.0 Enterprise R&D)
 
-[![Tests](https://img.shields.io/badge/Tests-61%20Passing%20(100%25)-00ff88?style=flat-square&logo=node.js)](file:///tests)
+[![Tests](https://img.shields.io/badge/Tests-70%20Passing%20(100%25)-00ff88?style=flat-square&logo=node.js)](file:///tests)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.x-00f0ff?style=flat-square&logo=typescript)](https://www.typescriptlang.org/)
 [![Three.js](https://img.shields.io/badge/Three.js-WebGL-ffaa00?style=flat-square&logo=three.js)](https://threejs.org/)
 [![License](https://img.shields.io/badge/License-Source--Available%20Commercial-a855f7?style=flat-square)](./LICENSE)
 
-**VIBE SpatialOS & Studio** to bezgogliowy, adaptacyjny system przestrzennego projektowania 3D, Digital Twin oraz zunifikowana platforma obliczeń przestrzennych integrująca haptykę ultradźwiękową 40 kHz w powietrzu, detekcję obecności Wi-Fi CSI (17-punktowy szkielet sylwetki), opaskę 9-DoF IMU/EMG, uniwersalny mostek CAD/BIM oraz interfejs mózg-komputer BCI z empatią kognitywną (GCS-v7).
+**VIBE SpatialOS & Studio** to bezgogliowy, adaptacyjny system przestrzennego projektowania 3D, Digital Twin oraz zunifikowana platforma obliczeń przestrzennych integrująca wielomodalną fuzję sensoryczną (ToF + Wi-Fi CSI RF + IMU 500Hz + BCI), haptykę ultradźwiękową 40 kHz w powietrzu, opaskę 9-DoF IMU/EMG, uniwersalny mostek CAD/BIM oraz interfejs mózg-komputer BCI z empatią kognitywną (GCS-v7).
 
 ---
 
@@ -16,6 +16,7 @@ c:\Projekty\Vibe SpatialOS/
 ├── packages/
 │   ├── spatial-core/        # Unified ℝ³ Space, OBB, Kalman 15ms, Haptics 40kHz Solver,
 │   │                        # SpatialNodeGraph, WearableDeviceManager, HapticGridSnapper, CADBridgeConnector
+│   ├── sensor-fusion/       # 9-DoF EKF Gaussian Multimodal Fusion, Mahalanobis Gating, Occlusion Handover
 │   ├── rf-sensing/          # Wi-Fi CSI Sensing, 17-Keypoint Human Skeleton, RuView/rvCSI, Vitals, Circuit Breaker
 │   ├── bci-cognitive/       # GCS-v7 BCI & Empathy Bridge, Zero-Latency Motor Intent Pre-Buffer, Auto-LOD, AES-256
 │   ├── semantic-ai/         # Deictic Multimodal Context Resolver (Gaze + Pointing + Speech), Semantic LOD
@@ -34,7 +35,8 @@ c:\Projekty\Vibe SpatialOS/
 │   ├── haptic-grid-snapper.test.ts# Mid-air 1-100mm grid snapping & acoustic detent tests
 │   ├── cad-bridge.test.ts         # SolidWorks, Rhino 8 & Revit bidirectional bridge tests
 │   ├── rf-sensing.test.ts         # Wi-Fi CSI 17-keypoint skeleton, vitals, circuit breaker & temporal aligner
-│   └── bci-cognitive.test.ts      # GCS-v7 BCI motor intent pre-buffer, auto-LOD & AES-256 encryption
+│   ├── bci-cognitive.test.ts      # GCS-v7 BCI motor intent pre-buffer, auto-LOD & AES-256 encryption
+│   └── sensor-fusion.test.ts      # 9-DoF EKF, Gaussian covariance, Mahalanobis gating & occlusion handover
 └── LICENSE                  # Source-Available Commercial & Hardware-Bound License
 ```
 
@@ -88,6 +90,15 @@ c:\Projekty\Vibe SpatialOS/
 - **Adaptacyjny Auto-LOD**: Automatyczna optymalizacja geometrii CAD w oparciu o obciążenie poznawcze i poziom skupienia (*Deep Flow*).
 - **Szyfrowanie AES-256-GCM / SHA-256**: Pełne bezpieczeństwo biometryczne EEG/HRV.
 
+### 12. Wielomodalny Filtr Fuzji Sensorycznej (`@vibe/sensor-fusion`)
+- **9-DoF Rozszerzony Filtr Kalmana (EKF)** z wagowaniem macierzą informacyjną Gaussa łączący:
+  - Optykę ToF ($0.5-1.5\text{ mm}$ precyzji w polu widzenia),
+  - Fale Wi-Fi CSI RF ($\sim 75\text{ mm}$ makro-obecności, odporne na przeszkody i ściany),
+  - Ubieralny IMU 500Hz (odpowiedź w mikrosekundach),
+  - BCI Motor Imagery priors.
+- **Bramkowanie Odległością Mahalanobisa ($\chi^2 < 11.34$)**: Automatyczne odrzucanie anomalnych skoków i szumów wielodrogowości.
+- **Bezszwowy Handover Okluzji**: Płynne przełączanie śledzenia na IMU + RF, gdy dłoń schowa się za detalem CAD.
+
 ---
 
 ## 🚀 Szybki Start
@@ -105,7 +116,7 @@ npm run dev:gateway
 # 4. Uruchomienie Wszystkich Usług Równolegle
 npm run dev:all
 
-# 5. Uruchomienie Pełnej Suity Testowej (61 testów)
+# 5. Uruchomienie Pełnej Suity Testowej (70 testów)
 npm test
 ```
 

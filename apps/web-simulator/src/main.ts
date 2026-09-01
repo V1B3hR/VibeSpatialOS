@@ -25,6 +25,7 @@ import { CommandConsole } from './ui/CommandConsole.js';
 import { SpatialWayfinding } from './stage/SpatialWayfinding.js';
 import { SimulatedRFSource, RFFrame } from '@vibe/rf-sensing';
 import { SpatialRFVisualizer } from './stage/SpatialRFVisualizer.js';
+import { OcclusionHandoverManager } from '@vibe/sensor-fusion';
 
 class SpatialStudioApp {
   // Three.js Core
@@ -49,6 +50,7 @@ class SpatialStudioApp {
   private rfVisualizer: SpatialRFVisualizer;
   private rfSource: SimulatedRFSource;
   private latestRFFrame: RFFrame | null = null;
+  private fusionManager = new OcclusionHandoverManager();
 
   // UI Components
   private hud: SpatialHUD;
@@ -770,6 +772,34 @@ class SpatialStudioApp {
     const planeLock = this.worldEngine.wearableManager.getActivePlaneLock();
     const isSqueezing = this.worldEngine.wearableManager.isGripSqueezing();
     this.hud.updateWearableHUD(planeLock, isSqueezing ? 0.88 : 0.12, isSqueezing, null);
+
+    // 6. Multimodal Sensor Fusion (ToF + RF CSI + IMU) & Occlusion Handover
+    const fusedState = this.fusionManager.processSensors({
+      tofMeasurement: {
+        position: rightHandState.palmPosition,
+        confidence: 0.95,
+        isOccluded: false
+      },
+      rfMeasurement: this.latestRFFrame?.skeleton ? {
+        position: this.latestRFFrame.skeleton.keypoints.right_wrist.position,
+        snrDb: 32.0,
+        confidence: this.latestRFFrame.presenceConfidence
+      } : undefined,
+      imuMeasurement: {
+        linearAccel: { x: 0, y: 0, z: 0 },
+        angularVel: { x: 0, y: 0, z: 0 },
+        dtSec: delta
+      },
+      timestampMs: performance.now()
+    });
+
+    this.hud.updateFusionHUD(
+      fusedState.provenance.tofWeight,
+      fusedState.provenance.rfWeight,
+      fusedState.provenance.imuWeight,
+      this.fusionManager.isOccluded(),
+      fusedState.isOutlierRejected
+    );
 
     // 6. Record snapshot in Flight Recorder if active
     this.worldEngine.snapshotFlightRecord(1.42, focalPos, gestureResult.action);

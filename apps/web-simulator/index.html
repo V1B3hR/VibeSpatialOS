@@ -144,6 +144,22 @@
         <button class="wearable-btn" id="btn-tilt-pitch" title="Simulate vertical wrist tilt (XY Plane)">Tilt XY Plane</button>
         <button class="wearable-btn" id="btn-squeeze-emg" title="Simulate EMG muscle squeeze">Squeeze Grip</button>
       </div>
+
+      <div class="hud-divider"></div>
+
+      <!-- Multimodal Sensor Fusion (EKF) -->
+      <div class="hud-header">
+        <span class="hud-title">MULTIMODAL SENSOR FUSION</span>
+        <span class="hud-badge highlight-cyan">9-DoF EKF</span>
+      </div>
+      <div class="stat-row">
+        <span class="stat-name">Active Provenance:</span>
+        <span class="stat-val highlight-cyan" id="stat-fusion-provenance">ToF: 75% | RF: 15% | IMU: 10%</span>
+      </div>
+      <div class="stat-row">
+        <span class="stat-name">Mahalanobis Gating:</span>
+        <span class="stat-val highlight-green" id="stat-fusion-gating">NOMINAL (χ² &lt; 11.34)</span>
+      </div>
     </aside>
 
     <!-- RIGHT HAPTICS & LOD HUD -->
