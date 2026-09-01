@@ -23,6 +23,8 @@ import { HapticsVisualizer } from './ui/HapticsVisualizer.js';
 import { SpatialHUD } from './ui/SpatialHUD.js';
 import { CommandConsole } from './ui/CommandConsole.js';
 import { SpatialWayfinding } from './stage/SpatialWayfinding.js';
+import { SimulatedRFSource, RFFrame } from '@vibe/rf-sensing';
+import { SpatialRFVisualizer } from './stage/SpatialRFVisualizer.js';
 
 class SpatialStudioApp {
   // Three.js Core
@@ -44,6 +46,9 @@ class SpatialStudioApp {
   private molecule: MoleculeModelEntity;
   private handTracker: VirtualHandTracker;
   private wayfinding: SpatialWayfinding;
+  private rfVisualizer: SpatialRFVisualizer;
+  private rfSource: SimulatedRFSource;
+  private latestRFFrame: RFFrame | null = null;
 
   // UI Components
   private hud: SpatialHUD;
@@ -110,6 +115,16 @@ class SpatialStudioApp {
 
     this.handTracker = new VirtualHandTracker();
     this.scene.add(this.handTracker.group);
+
+    // RF 17-Keypoint Human Skeleton & Vitals Visualizer
+    this.rfVisualizer = new SpatialRFVisualizer();
+    this.scene.add(this.rfVisualizer.group);
+
+    this.rfSource = new SimulatedRFSource(20);
+    this.rfSource.onFrame((frame) => {
+      this.latestRFFrame = frame;
+    });
+    this.rfSource.connect();
 
     // 4. Register Spatial Objects with Metric Coordinates in World Engine
     this.worldEngine.registerObject({
@@ -569,6 +584,14 @@ class SpatialStudioApp {
     } else if (res.actionType === 'CAD_PARAMETRIC_EDIT') {
       this.console.logMessage(`Zaktualizowano wymiar parametryczny CAD: ${res.payload?.featureName} = ${res.payload?.value} mm.`);
     }
+
+    // 14. RF Wi-Fi CSI Sensing (π RuView / rvCSI)
+    else if (res.actionType === 'RF_SENSING_TOGGLE') {
+      this.rfVisualizer.setVisible(true);
+      this.console.logMessage('RF Wi-Fi Sensing: Wyświetlam neonowy szkielet 17-punktowy (rvCSI stream).');
+    } else if (res.actionType === 'RF_VITALS_QUERY') {
+      this.console.logMessage('Biometria RF CSI: Oddech: 15 bpm, Tętno: 72 bpm (Pewność sygnału: 94%).');
+    }
   }
 
   private applySemanticLOD(lod: string): void {
@@ -717,6 +740,7 @@ class SpatialStudioApp {
     this.turbine.update(delta, time);
     this.molecule.update(delta, time);
     this.wayfinding.update(time, this.camera.position);
+    this.rfVisualizer.update(this.latestRFFrame?.skeleton, time);
 
     // 5. Update HUD Telemetry
     this.hud.updateHandKinematics(velMagnitude);

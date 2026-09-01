@@ -53,6 +53,8 @@ export type SpatialActionType =
   | 'CAD_CONNECT'
   | 'CAD_SYNC'
   | 'CAD_PARAMETRIC_EDIT'
+  | 'RF_SENSING_TOGGLE'
+  | 'RF_VITALS_QUERY'
   | 'CALIBRATE'
   | 'CALIBRATE_PERIMETER'
   | 'TRIGGER_HAPTICS'
@@ -299,6 +301,38 @@ export class MultimodalSpatialAgent {
         message: `Universal CAD Bridge connected to host application: [${host}]. Live 60Hz B-Rep and deictic pick synchronization active.`,
         actionType: 'CAD_CONNECT',
         payload: { host, connected: true }
+      };
+    }
+
+    // =========================================================================
+    // 0.4 RF WI-FI CSI SENSING & 17-KEYPOINT SKELETON (π RuView / rvCSI)
+    // =========================================================================
+    if (
+      text.includes('rf sensing') ||
+      text.includes('wifi sensing') ||
+      text.includes('wi-fi sensing') ||
+      text.includes('ruview') ||
+      text.includes('rvcsi') ||
+      text.includes('csi skeleton') ||
+      text.includes('human skeleton') ||
+      text.includes('szkielet rf') ||
+      text.includes('oddech') ||
+      text.includes('vitals')
+    ) {
+      if (text.includes('vitals') || text.includes('oddech') || text.includes('tętno') || text.includes('heart')) {
+        return {
+          success: true,
+          message: 'RF Wi-Fi CSI Biometrics active: Breathing ~15 bpm (0.25 Hz), Heart Rate ~72 bpm, Chest expansion 5.5 mm. Signal confidence: 94%.',
+          actionType: 'RF_VITALS_QUERY',
+          payload: { breathingBpm: 15, heartBpm: 72, confidence: 0.94 }
+        };
+      }
+
+      return {
+        success: true,
+        message: 'RF Sensing (π RuView / rvCSI) active. Holographic 17-keypoint skeleton and device-free presence streaming in ℝ³.',
+        actionType: 'RF_SENSING_TOGGLE',
+        payload: { visible: true }
       };
     }
 

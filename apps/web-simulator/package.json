@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@vibe/closed-loop": "*",
+    "@vibe/rf-sensing": "*",
     "@vibe/semantic-ai": "*",
     "@vibe/spatial-core": "*",
     "three": "^0.174.0"
