@@ -1,11 +1,11 @@
 # 🌌 VIBE SpatialOS & Studio (v2.0 Enterprise R&D)
 
-[![Tests](https://img.shields.io/badge/Tests-47%20Passing%20(100%25)-00ff88?style=flat-square&logo=node.js)](file:///tests)
+[![Tests](https://img.shields.io/badge/Tests-61%20Passing%20(100%25)-00ff88?style=flat-square&logo=node.js)](file:///tests)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.x-00f0ff?style=flat-square&logo=typescript)](https://www.typescriptlang.org/)
 [![Three.js](https://img.shields.io/badge/Three.js-WebGL-ffaa00?style=flat-square&logo=three.js)](https://threejs.org/)
 [![License](https://img.shields.io/badge/License-Source--Available%20Commercial-a855f7?style=flat-square)](./LICENSE)
 
-**VIBE SpatialOS & Studio** to bezgogliowy, adaptacyjny system przestrzennego projektowania 3D, Digital Twin oraz warstwa abstrakcji sprzętowej (HAL) z zamkniętą pętlą sprzężenia optyczno-sensorycznego (SVD), haptyką ultradźwiękową 40 kHz w powietrzu, uniwersalnym mostkiem CAD/BIM oraz kontrolerem ubieralnym 9-DoF IMU/EMG.
+**VIBE SpatialOS & Studio** to bezgogliowy, adaptacyjny system przestrzennego projektowania 3D, Digital Twin oraz zunifikowana platforma obliczeń przestrzennych integrująca haptykę ultradźwiękową 40 kHz w powietrzu, detekcję obecności Wi-Fi CSI (17-punktowy szkielet sylwetki), opaskę 9-DoF IMU/EMG, uniwersalny mostek CAD/BIM oraz interfejs mózg-komputer BCI z empatią kognitywną (GCS-v7).
 
 ---
 
@@ -16,10 +16,12 @@ c:\Projekty\Vibe SpatialOS/
 ├── packages/
 │   ├── spatial-core/        # Unified ℝ³ Space, OBB, Kalman 15ms, Haptics 40kHz Solver,
 │   │                        # SpatialNodeGraph, WearableDeviceManager, HapticGridSnapper, CADBridgeConnector
+│   ├── rf-sensing/          # Wi-Fi CSI Sensing, 17-Keypoint Human Skeleton, RuView/rvCSI, Vitals, Circuit Breaker
+│   ├── bci-cognitive/       # GCS-v7 BCI & Empathy Bridge, Zero-Latency Motor Intent Pre-Buffer, Auto-LOD, AES-256
 │   ├── semantic-ai/         # Deictic Multimodal Context Resolver (Gaze + Pointing + Speech), Semantic LOD
 │   └── closed-loop/         # 6-DoF Kabsch-Umeyama SVD Closed-Loop Optical Auto-Calibrator
 ├── apps/
-│   ├── web-simulator/       # Three.js Digital Twin Studio, Holographic 3D Wayfinding, Telemetry Glass HUD
+│   ├── web-simulator/       # Three.js Digital Twin Studio, Neon RF Human Avatar, Wayfinding, Telemetry Glass HUD
 │   └── spatial-gateway/     # UDP Multicast (60Hz) & WebSocket Telemetry Server
 ├── hardware/
 │   ├── wokwi/               # RP2040 + VL53L5CX (SPI DMA) + W5500 Multicast Firmware
@@ -30,7 +32,9 @@ c:\Projekty\Vibe SpatialOS/
 │   ├── spatial-node-graph.test.ts # Hierarchical node partitioning & BFS wayfinding tests
 │   ├── wearable-device.test.ts    # VIBE Pulse IMU 500Hz, EMG grip & MIDI 2.0 tests
 │   ├── haptic-grid-snapper.test.ts# Mid-air 1-100mm grid snapping & acoustic detent tests
-│   └── cad-bridge.test.ts         # SolidWorks, Rhino 8 & Revit bidirectional bridge tests
+│   ├── cad-bridge.test.ts         # SolidWorks, Rhino 8 & Revit bidirectional bridge tests
+│   ├── rf-sensing.test.ts         # Wi-Fi CSI 17-keypoint skeleton, vitals, circuit breaker & temporal aligner
+│   └── bci-cognitive.test.ts      # GCS-v7 BCI motor intent pre-buffer, auto-LOD & AES-256 encryption
 └── LICENSE                  # Source-Available Commercial & Hardware-Bound License
 ```
 
@@ -74,6 +78,16 @@ c:\Projekty\Vibe SpatialOS/
 ### 9. Uniwersalny Mostek CAD/BIM (`@vibe/cad-bridge`)
 - Dwukierunkowa synchronizacja geometrii i złożeń w czasie rzeczywistym (60–120 Hz) z **SolidWorks, Rhino 8, Autodesk Revit, AutoCAD i Blenderem**.
 
+### 10. Warstwa RF Wi-Fi CSI Sensing (`@vibe/rf-sensing`)
+- Bezinwazyjna detekcja obecności i rekonstrukcja **17-punktowego szkieletu sylwetki człowieka** (COCO) ze strumieni Wi-Fi CSI (π RuView / rvCSI) z mikrometryczną estymacją oddechu ($\sim 15\text{ bpm}$) i tętna ($\sim 72\text{ bpm}$).
+- **SensorCircuitBreaker & TemporalAligner**: Odporność na awarie zasilania/sieci węzłów ESP32 oraz interpolacja Hermite'a synchronizująca różne częstotliwości próbkowania.
+
+### 11. Mostek Kognitywny BCI & Empathy (`@vibe/bci-cognitive`)
+- Integracja z modelem grafowych sieci atencji (GAT) z repozytorium **[GCS-v7-with-empathy](https://github.com/V1B3hR/GCS-v7-with-empathy)**.
+- **Pre-buffering intencji ruchowej (50–120ms)**: Percepcja zerowej latencji przed fizycznym skurczem mięśni.
+- **Adaptacyjny Auto-LOD**: Automatyczna optymalizacja geometrii CAD w oparciu o obciążenie poznawcze i poziom skupienia (*Deep Flow*).
+- **Szyfrowanie AES-256-GCM / SHA-256**: Pełne bezpieczeństwo biometryczne EEG/HRV.
+
 ---
 
 ## 🚀 Szybki Start
@@ -91,7 +105,7 @@ npm run dev:gateway
 # 4. Uruchomienie Wszystkich Usług Równolegle
 npm run dev:all
 
-# 5. Uruchomienie Pełnej Suity Testowej (47 testów)
+# 5. Uruchomienie Pełnej Suity Testowej (61 testów)
 npm test
 ```
 
