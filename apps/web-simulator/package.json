@@ -9,6 +9,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@vibe/bci-cognitive": "*",
     "@vibe/closed-loop": "*",
     "@vibe/rf-sensing": "*",
     "@vibe/semantic-ai": "*",

@@ -55,6 +55,9 @@ export type SpatialActionType =
   | 'CAD_PARAMETRIC_EDIT'
   | 'RF_SENSING_TOGGLE'
   | 'RF_VITALS_QUERY'
+  | 'BCI_CONNECT'
+  | 'BCI_INTENT_QUERY'
+  | 'BCI_COGNITIVE_STATE'
   | 'CALIBRATE'
   | 'CALIBRATE_PERIMETER'
   | 'TRIGGER_HAPTICS'
@@ -333,6 +336,47 @@ export class MultimodalSpatialAgent {
         message: 'RF Sensing (π RuView / rvCSI) active. Holographic 17-keypoint skeleton and device-free presence streaming in ℝ³.',
         actionType: 'RF_SENSING_TOGGLE',
         payload: { visible: true }
+      };
+    }
+
+    // =========================================================================
+    // 0.5 GCS-v7 BCI & COGNITIVE EMPATHY BRIDGE
+    // =========================================================================
+    if (
+      text.includes('gcs-v7') ||
+      text.includes('bci') ||
+      text.includes('cognitive') ||
+      text.includes('kognitywn') ||
+      text.includes('motor imagery') ||
+      text.includes('intencja') ||
+      text.includes('focus') ||
+      text.includes('skupienie') ||
+      text.includes('stress') ||
+      text.includes('stres')
+    ) {
+      if (text.includes('focus') || text.includes('skupienie') || text.includes('stress') || text.includes('stres') || text.includes('load') || text.includes('stan')) {
+        return {
+          success: true,
+          message: 'Stan Kognitywny GCS-v7: Focus Index: 0.88 (Głębokie skupienie / Deep Flow), Stres: 0.18 (Niski), Auto-LOD: MAX_PRECISION.',
+          actionType: 'BCI_COGNITIVE_STATE',
+          payload: { focusIndex: 0.88, stressLevel: 0.18, suggestedLOD: 'MAX_PRECISION' }
+        };
+      }
+
+      if (text.includes('intent') || text.includes('intencja') || text.includes('pre-buffer') || text.includes('pre-load')) {
+        return {
+          success: true,
+          message: 'Zero-Latency Motor Imagery aktywne: Wykryto intencję chwytu [MOTOR_IMAGERY_PINCH] (Pewność GAT: 86.5%, wyprzedzenie: 85ms).',
+          actionType: 'BCI_INTENT_QUERY',
+          payload: { intent: 'MOTOR_IMAGERY_PINCH', confidence: 0.865, leadTimeMs: 85 }
+        };
+      }
+
+      return {
+        success: true,
+        message: 'Mostek GCS-v7 BCI połączony. Asynchroniczny strumień intencji motorycznych i afektu aktywny.',
+        actionType: 'BCI_CONNECT',
+        payload: { connected: true, protocol: 'GCS_V7_EMPATHY_IPC' }
       };
     }
 

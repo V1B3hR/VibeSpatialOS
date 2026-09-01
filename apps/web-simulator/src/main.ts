@@ -592,6 +592,15 @@ class SpatialStudioApp {
     } else if (res.actionType === 'RF_VITALS_QUERY') {
       this.console.logMessage('Biometria RF CSI: Oddech: 15 bpm, Tętno: 72 bpm (Pewność sygnału: 94%).');
     }
+
+    // 15. GCS-v7 BCI & Cognitive Empathy Bridge
+    else if (res.actionType === 'BCI_CONNECT') {
+      this.console.logMessage('Mostek GCS-v7 BCI połączony: Aktywne dekodowanie GAT Motor Imagery.');
+    } else if (res.actionType === 'BCI_INTENT_QUERY') {
+      this.console.logMessage('BCI Motor Intent: Pre-buforowano chwyt [PINCH] (Wyprzedzenie 85ms).');
+    } else if (res.actionType === 'BCI_COGNITIVE_STATE') {
+      this.console.logMessage('Stan Kognitywny: Focus: 0.88, Stres: 0.18 -> Ustawiono MAX_PRECISION.');
+    }
   }
 
   private applySemanticLOD(lod: string): void {
