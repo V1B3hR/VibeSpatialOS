@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VIBE SpatialOS & Studio v2.0 - Digital Twin & Spatial Computing Engine</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/src/style.css">
+</head>
+<body>
+  <div id="app">
+    <!-- 3D WebGL Canvas Container -->
+    <canvas id="spatial-canvas"></canvas>
+
+    <!-- TOP HEADER -->
+    <header class="top-nav glass-panel">
+      <div class="brand">
+        <div class="pulse-indicator online"></div>
+        <div class="brand-text">
+          <span class="logo-title">VIBE SPATIAL<span class="highlight">OS</span></span>
+          <span class="version-tag">v2.0 ENTERPRISE R&D</span>
+        </div>
+      </div>
+
+      <div class="system-status">
+        <div class="status-chip" id="chip-ws">
+          <span class="dot"></span>
+          <span class="label">GATEWAY:</span>
+          <span class="value" id="val-ws-status">INITIALIZING</span>
+        </div>
+        <div class="status-chip" id="chip-calib">
+          <span class="dot active"></span>
+          <span class="label">OPTICAL DISPARITY:</span>
+          <span class="value" id="val-rms-error">1.42 mm RMS</span>
+        </div>
+        <div class="status-chip">
+          <span class="label">COORDINATES:</span>
+          <span class="value">UNIFIED $\mathbb{R}^3$ METRIC</span>
+        </div>
+      </div>
+
+      <div class="header-actions">
+        <button id="btn-calibrate" class="action-btn glow-btn" title="Run 6-DoF Kabsch-Umeyama SVD Closed-Loop Calibration">
+          <span class="icon">⟳</span> AUTO-CALIBRATE
+        </button>
+        <button id="btn-recorder" class="action-btn record-btn" title="Spatial Black-Box Flight Recorder">
+          <span class="rec-dot"></span> REC
+        </button>
+      </div>
+    </header>
+
+    <!-- LEFT TELEMETRY HUD -->
+    <aside class="left-hud glass-panel">
+      <div class="hud-header">
+        <span class="hud-title">SPATIAL SENSOR GRID</span>
+        <span class="hud-badge">60 Hz SPI DMA</span>
+      </div>
+
+      <!-- Sensor Nodes Matrix -->
+      <div class="sensor-nodes-grid">
+        <div class="sensor-card active" id="node-card-1">
+          <div class="card-head"><span>NODE #1 [NW]</span><span class="freq">60Hz</span></div>
+          <div class="matrix-preview" id="matrix-n1"></div>
+        </div>
+        <div class="sensor-card active" id="node-card-2">
+          <div class="card-head"><span>NODE #2 [NE]</span><span class="freq">60Hz</span></div>
+          <div class="matrix-preview" id="matrix-n2"></div>
+        </div>
+        <div class="sensor-card active" id="node-card-3">
+          <div class="card-head"><span>NODE #3 [SW]</span><span class="freq">60Hz</span></div>
+          <div class="matrix-preview" id="matrix-n3"></div>
+        </div>
+        <div class="sensor-card active" id="node-card-4">
+          <div class="card-head"><span>NODE #4 [SE]</span><span class="freq">60Hz</span></div>
+          <div class="matrix-preview" id="matrix-n4"></div>
+        </div>
+      </div>
+
+      <div class="hud-divider"></div>
+
+      <!-- Kinematics & Kalman Predictive Layer -->
+      <div class="hud-header">
+        <span class="hud-title">PREDICTIVE DEAD-RECKONING</span>
+        <span class="hud-badge">15ms $\Delta t$</span>
+      </div>
+      <div class="stat-row">
+        <span class="stat-name">Motion-To-Photon Lag:</span>
+        <span class="stat-val highlight-cyan" id="stat-latency">8.4 ms</span>
+      </div>
+      <div class="stat-row">
+        <span class="stat-name">Kalman Jitter Rejection:</span>
+        <span class="stat-val highlight-green">ACTIVE (-34dB)</span>
+      </div>
+      <div class="stat-row">
+        <span class="stat-name">Right Hand Velocity:</span>
+        <span class="stat-val" id="stat-hand-vel">0.12 m/s</span>
+      </div>
+
+      <div class="hud-divider"></div>
+
+      <!-- Gesture State Machine -->
+      <div class="hud-header">
+        <span class="hud-title">SCHMITT TRIGGER HYSTERESIS</span>
+      </div>
+      <div class="gesture-meter-container">
+        <div class="meter-labels">
+          <span>Pinch Gap:</span>
+          <span id="txt-pinch-dist">38.2 mm</span>
+        </div>
+        <div class="meter-bar-track">
+          <div class="threshold-marker enter" style="left: 40%;" title="Enter Threshold (20mm)"></div>
+          <div class="threshold-marker exit" style="left: 70%;" title="Exit Threshold (35mm)"></div>
+          <div class="meter-bar-fill" id="bar-pinch-fill" style="width: 76%;"></div>
+        </div>
+        <div class="meter-states">
+          <span class="state-tag" id="tag-pinch-state">STATE: IDLE (RELEASED)</span>
+        </div>
+      </div>
+
+      <div class="hud-divider"></div>
+
+      <!-- VIBE Pulse Wearable Telemetry -->
+      <div class="hud-header">
+        <span class="hud-title">VIBE PULSE 9-DoF IMU & EMG</span>
+        <span class="hud-badge highlight-purple">500Hz BLE</span>
+      </div>
+      <div class="stat-row">
+        <span class="stat-name">Plane Lock Mode:</span>
+        <span class="stat-val highlight-cyan" id="stat-plane-lock">FREE 6-DoF</span>
+      </div>
+      <div class="stat-row">
+        <span class="stat-name">EMG Bio-Grip:</span>
+        <span class="stat-val highlight-green" id="stat-emg-grip">RELAXED (0.12)</span>
+      </div>
+      <div class="stat-row">
+        <span class="stat-name">Last Wrist Gesture:</span>
+        <span class="stat-val highlight-orange" id="stat-wrist-gesture">IDLE</span>
+      </div>
+      <div class="wearable-quick-triggers">
+        <button class="wearable-btn" id="btn-flick-left" title="Simulate rapid wrist flick left">Flick Left (Undo)</button>
+        <button class="wearable-btn" id="btn-flick-right" title="Simulate rapid wrist flick right">Flick Right (Redo)</button>
+        <button class="wearable-btn" id="btn-tilt-pitch" title="Simulate vertical wrist tilt (XY Plane)">Tilt XY Plane</button>
+        <button class="wearable-btn" id="btn-squeeze-emg" title="Simulate EMG muscle squeeze">Squeeze Grip</button>
+      </div>
+    </aside>
+
+    <!-- RIGHT HAPTICS & LOD HUD -->
+    <aside class="right-hud glass-panel">
+      <div class="hud-header">
+        <span class="hud-title">PHASED-ARRAY MID-AIR HAPTICS</span>
+        <span class="hud-badge">40kHz + 200Hz AM</span>
+      </div>
+
+      <!-- 2D Acoustic Field Pressure Heatmap -->
+      <div class="haptics-viewport">
+        <canvas id="haptics-canvas" width="220" height="220"></canvas>
+        <div class="haptics-crosshair"></div>
+      </div>
+      <div class="haptics-telemetry">
+        <div class="stat-row">
+          <span class="stat-name">Acoustic Peak Pressure:</span>
+          <span class="stat-val highlight-orange" id="val-haptic-pressure">1.84 kPa</span>
+        </div>
+        <div class="stat-row">
+          <span class="stat-name">Mechanoreceptor Actuation:</span>
+          <span class="stat-val highlight-cyan">Meissner / Pacinian</span>
+        </div>
+        <div class="stat-row">
+          <span class="stat-name">Carrier / Envelope:</span>
+          <span class="stat-val">40.0 kHz / 200 Hz</span>
+        </div>
+      </div>
+
+      <div class="hud-divider"></div>
+
+      <!-- Semantic LOD Selector -->
+      <div class="hud-header">
+        <span class="hud-title">SEMANTIC SPATIAL LOD</span>
+      </div>
+      <div class="lod-selector-grid">
+        <button class="lod-btn active" data-lod="MACRO_CAD">1. MACRO CAD</button>
+        <button class="lod-btn" data-lod="MECHANICAL_COMPONENT">2. COMPONENT</button>
+        <button class="lod-btn" data-lod="CRYSTAL_LATTICE">3. LATTICE</button>
+        <button class="lod-btn" data-lod="MOLECULAR_ORBITAL">4. ORBITALS</button>
+      </div>
+
+      <div class="hud-divider"></div>
+
+      <!-- Active Objects Inspector -->
+      <div class="hud-header">
+        <span class="hud-title">ACTIVE SPATIAL ENTITIES</span>
+      </div>
+      <div class="entity-list" id="entity-list-container">
+        <!-- Dynamically filled -->
+      </div>
+    </aside>
+
+    <!-- BOTTOM MULTIMODAL AI & DEICTIC CONSOLE -->
+    <footer class="bottom-console glass-panel">
+      <!-- Quick Action Suggestion Chips -->
+        <button class="prompt-chip" data-cmd="Connect to SolidWorks">"Connect to SolidWorks"</button>
+        <button class="prompt-chip" data-cmd="Snap to 10mm grid">"Snap to 10mm Grid"</button>
+        <button class="prompt-chip" data-cmd="Show node graph">"Show Node Graph"</button>
+        <button class="prompt-chip" data-cmd="Jump to turbine node">"Jump to Turbine Node"</button>
+        <button class="prompt-chip" data-cmd="Jump to molecule node">"Jump to Molecule Node"</button>
+        <button class="prompt-chip" data-cmd="Show wayfinding arrows">"Show Wayfinding Arrows"</button>
+        <button class="prompt-chip" data-cmd="Expand CAD components">"Expand CAD components"</button>
+        <button class="prompt-chip" data-cmd="Disassemble molecule into atoms">"Disassemble molecule"</button>
+        <button class="prompt-chip" data-cmd="Trace haptic perimeter">"Trace haptic perimeter"</button>
+        <button class="prompt-chip" data-cmd="Wipe workspace">"Wipe workspace (wave hand)"</button>
+      </div>
+
+      <!-- Main Input Bar -->
+      <div class="input-bar-container">
+        <button id="btn-mic" class="mic-btn" title="Toggle Spatial Voice Recognition">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+            <path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3z"/>
+            <path d="M17 11c0 2.76-2.24 5-5 5s-5-2.24-5-5H5c0 3.53 2.61 6.43 6 6.92V21h2v-3.08c3.39-.49 6-3.39 6-6.92h-2z"/>
+          </svg>
+        </button>
+
+        <input
+          type="text"
+          id="cmd-input"
+          placeholder="Enter spatial or deictic command (e.g., 'Enlarge this element', 'Expand turbine', 'Two-hand stretch', 'Rotate 3D 90 degrees', 'Wipe workspace')..."
+          autocomplete="off"
+        />
+
+        <button id="btn-send" class="send-btn">EXECUTE</button>
+      </div>
+
+      <!-- Execution Log Banner -->
+      <div class="log-banner" id="log-banner">
+        <span class="log-tag">AI DEICTIC CORE:</span>
+        <span class="log-text" id="log-text">Ready. Connected to $\mathbb{R}^3$ spatial engine. Point or gaze at an object and issue a command.</span>
+      </div>
+    </footer>
+
+    <!-- INTERACTIVE FLOATING TOOLBAR -->
+    <div class="floating-controls glass-panel">
+      <div class="control-group">
+        <span class="ctrl-title">6-DoF HAND SIMULATOR</span>
+        <div class="btn-toggle-row">
+          <button id="btn-toggle-pinch" class="ctrl-btn">PINCH [SPACE]</button>
+          <button id="btn-toggle-ghost" class="ctrl-btn active">15ms PREDICTOR GHOST</button>
+          <button id="btn-reset-pos" class="ctrl-btn">RESET SCENE</button>
+        </div>
+      </div>
+      <div class="control-hint">
+        <span>[L-Click + Drag]: Camera Orbit | [R-Click / Shift + Move]: 3D Hand Motion | [Space]: Pinch Grab</span>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="/src/main.ts"></script>
+</body>
+</html>

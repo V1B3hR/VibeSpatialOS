@@ -1,0 +1,23 @@
+{
+  "name": "@vibe/spatial-gateway",
+  "version": "2.0.0",
+  "description": "High-speed UDP multicast gateway & WebSocket telemetry distributor for VIBE SpatialOS",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "build": "tsc -b",
+    "dev": "node --import tsx/esm src/index.ts",
+    "start": "node dist/index.js"
+  },
+  "dependencies": {
+    "@vibe/spatial-core": "*",
+    "ws": "^8.18.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.13.5",
+    "@types/ws": "^8.5.14",
+    "tsx": "^4.19.3",
+    "typescript": "^5.7.3"
+  }
+}

@@ -1,0 +1,47 @@
+VIBE SPATIALOS SOURCE-AVAILABLE COMMERCIAL & HARDWARE-BOUND LICENSE
+Version 1.0, September 2026
+
+Copyright (c) 2026 VIBE SpatialOS Contributors & Author. All Rights Reserved.
+
+TERMS AND CONDITIONS FOR USE, REPRODUCTION, AND DISTRIBUTION
+
+1. DEFINITIONS
+   - "Software" refers to the VIBE SpatialOS monorepo, including all spatial mathematics,
+     Kalman filters, Kabsch-Umeyama SVD solvers, phased-array haptics solvers,
+     multimodal spatial AI agent, CAD/BIM bridge connectors, firmware, and WebGL simulators.
+   - "Hardware" refers to all electronic circuits, PCBs, microcontrollers (RP2040/ESP32),
+     phased-array transducer grids, VIBE Pulse wristbands, and optical ToF sensor nodes.
+   - "Commercial Use" refers to using the Software or Hardware for any revenue-generating,
+     commercial engineering, industrial production, or service-providing purposes.
+
+2. GRANT OF NON-COMMERCIAL EVALUATION LICENSE
+   Permission is hereby granted, free of charge, to any person obtaining a copy
+   of this Software and associated documentation files, to inspect, compile, and run
+   the Software solely for PERSONAL, EDUCATIONAL, AND NON-COMMERCIAL EVALUATION purposes.
+
+3. COMMERCIAL & HARDWARE RESTRICTIONS
+   - COMMERCIAL PROHIBITION: You may NOT use, deploy, integrate, sell, license, or sublicense
+     the Software or any derivative works for Commercial Use without a separate, written
+     Commercial License Agreement executed with the Copyright Holder.
+   - HARDWARE CLONING RESTRICTION: You may NOT manufacture, replicate, sell, or distribute
+     physical electronic hardware (including but not limited to 40kHz phased-array arrays,
+     9-DoF IMU/EMG wristbands, and sensor nodes) based on the schematics, firmware,
+     or algorithms contained within this repository without explicit commercial authorization.
+   - REVERSE ENGINEERING: Decompilation, disassembly, or extraction of proprietary trade
+     secrets from compiled firmware or production bundles is strictly prohibited.
+
+4. NO PATENT OR TRADEMARK LICENSE
+   This license does not grant any rights to use trademarks, trade names, logos,
+   or patent rights owned by the Copyright Holder.
+
+5. DISCLAIMER OF WARRANTY
+   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+   IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+   FITNESS FOR A PARTICULAR PURPOSE, AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+   AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES, OR OTHER
+   LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT, OR OTHERWISE, ARISING FROM,
+   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+   SOFTWARE.
+
+For commercial licensing, enterprise CAD integrations, and hardware distribution inquiries,
+please contact the project maintainer.

@@ -1,0 +1,22 @@
+{
+  "name": "@vibe/web-simulator",
+  "version": "2.0.0",
+  "description": "Interactive Three.js 3D Digital Twin Simulator for VIBE SpatialOS",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@vibe/closed-loop": "*",
+    "@vibe/semantic-ai": "*",
+    "@vibe/spatial-core": "*",
+    "three": "^0.174.0"
+  },
+  "devDependencies": {
+    "@types/three": "^0.174.0",
+    "typescript": "^5.7.3",
+    "vite": "^6.2.0"
+  }
+}

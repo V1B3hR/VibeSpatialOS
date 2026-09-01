@@ -1,0 +1,52 @@
+{
+  "version": 1,
+  "author": "VIBE Spatial Engineering",
+  "editor": "wokwi",
+  "parts": [
+    {
+      "type": "wokwi-pi-pico",
+      "id": "pico",
+      "top": 0,
+      "left": 0,
+      "attrs": { "env": "arduino-pico" }
+    },
+    {
+      "type": "wokwi-led",
+      "id": "led_sync",
+      "top": -80,
+      "left": 120,
+      "attrs": { "color": "green", "label": "SYNC_PULSE" }
+    },
+    {
+      "type": "wokwi-led",
+      "id": "led_net",
+      "top": -80,
+      "left": 180,
+      "attrs": { "color": "cyan", "label": "MULTICAST_TX" }
+    },
+    {
+      "type": "wokwi-resistor",
+      "id": "r1",
+      "top": -40,
+      "left": 120,
+      "attrs": { "value": "330" }
+    },
+    {
+      "type": "wokwi-resistor",
+      "id": "r2",
+      "top": -40,
+      "left": 180,
+      "attrs": { "value": "330" }
+    }
+  ],
+  "connections": [
+    [ "pico:GP20", "led_sync:A", "green", [ "v0" ] ],
+    [ "led_sync:C", "r1:1", "black", [ "v0" ] ],
+    [ "r1:2", "pico:GND.5", "black", [ "v0" ] ],
+
+    [ "pico:GP21", "led_net:A", "cyan", [ "v0" ] ],
+    [ "led_net:C", "r2:1", "black", [ "v0" ] ],
+    [ "r2:2", "pico:GND.5", "black", [ "v0" ] ]
+  ],
+  "dependencies": {}
+}

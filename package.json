@@ -1,0 +1,36 @@
+{
+  "name": "vibe-spatial-studio-monorepo",
+  "version": "2.0.0",
+  "description": "VIBE SpatialOS & Studio v2.0 - Glasses-Free Spatial Computing & Digital Twin Platform",
+  "private": true,
+  "workspaces": [
+    "packages/*",
+    "apps/*"
+  ],
+  "scripts": {
+    "dev": "npm.cmd run dev --workspace=apps/web-simulator",
+    "dev:gateway": "npm.cmd run dev --workspace=apps/spatial-gateway",
+    "dev:all": "concurrently \"npm.cmd run dev:gateway\" \"npm.cmd run dev\"",
+    "build": "npm.cmd run build --workspaces",
+    "test": "node --import tsx/esm --test tests/*.test.ts"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.2",
+    "isomorphic-git": "^1.41.9",
+    "tsx": "^4.19.3",
+    "typescript": "^5.7.3"
+  },
+  "keywords": [
+    "spatial-computing",
+    "digital-twin",
+    "haptics",
+    "sensor-fusion",
+    "threejs",
+    "webgpu",
+    "kalman-filter",
+    "svd",
+    "kabsch"
+  ],
+  "author": "VIBE Spatial Engineering",
+  "license": "MIT"
+}
